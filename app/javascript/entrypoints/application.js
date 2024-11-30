@@ -27,6 +27,15 @@ console.log('Visit the guide for more information: ', 'https://vite-ruby.netlify
 // Example: Import a stylesheet in app/frontend/index.css
 // import '~/index.css'
 
-import { createApp } from "vue";
-import App from "../components/App.vue"
-const app = createApp(App).mount("#app");
+import { createApp } from 'vue';
+import App from '../components/App.vue';
+import store from '../store';
+
+const auth_token = localStorage.getItem('auth_token');
+if (auth_token) {
+  store.dispatch('session/loginUserWithToken', { auth_token });
+}
+
+const app = createApp(App);
+app.use(store);
+app.mount('#app');

@@ -4,23 +4,26 @@ class Users::SessionsController < Devise::SessionsController
   private
 
   def respond_with(_resource, _opts = {})
-    render json: {
-      message: 'You are logged in.',
-      user: current_user
-    }, status: :ok
+    if current_user
+      render json: {
+        message: 'You are logged in.',
+        user: current_user
+      }, status: :ok
+    else
+      head :unauthorized
+    end
   end
 
   def respond_to_on_destroy
-    log_out_success && return if current_user
-
-    log_out_failure
+    head user_from_token.present? ? :ok : :unauthorized
   end
 
-  def log_out_success
-    render json: { message: 'You are logged out.' }, status: :ok
-  end
+  def user_from_token
+    token = request.headers['Authorization']&.split(' ')&.second
+    return if token.blank?
 
-  def log_out_failure
-    render json: { message: 'Hmm nothing happened.' }, status: :unauthorized
+    jwt_payload = JWT.decode(token, ENV['DEVISE_JWT_SECRET_KEY']).first
+    user_id = jwt_payload['sub']
+    User.find(user_id.to_s)
   end
 end
