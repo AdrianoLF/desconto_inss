@@ -6,5 +6,6 @@ Rails.application.routes.draw do
              }
   get '/member-data', to: 'members#show'
   root 'pages#home' # Define a rota raiz para pages#home
-  get 'pages/home'
+
+  get '*path', to: 'pages#home', constraints: ->(req) { !req.xhr? && req.format.html? }
 end

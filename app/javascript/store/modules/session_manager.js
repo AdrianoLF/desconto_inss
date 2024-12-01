@@ -67,6 +67,7 @@ const actions = {
           resolve();
         })
         .catch((error) => {
+          commit("resetUserInfo");
           reject(error);
         });
     });
@@ -108,7 +109,7 @@ const mutations = {
       email: null,
     };
     state.auth_token = null;
-    localStorage.removeItem("auth_token");
+    localStorage.auth_token = null;
     axios.defaults.headers.common["Authorization"] = null;
   },
 };

@@ -1,19 +1,19 @@
-<template lang="">
-    <div>
-        <h1>Vue</h1>
-        <session-manager />
-    </div>
+<template>
+  <div id="app">
+    <nav>
+      <router-link to="/">Home</router-link>
+      <router-link to="/login">Login</router-link>
+    </nav>
+    <router-view />
+  </div>
 </template>
-<script>
-import SessionManager from './SessionManager.vue';
 
+<script>
+import { mapGetters } from "vuex";
 export default {
   name: "App",
-  components: {
-    SessionManager,
-  },
-}
+  components: {},
+  methods: {},
+};
 </script>
-<style lang="">
-    
-</style>
+<style lang=""></style>

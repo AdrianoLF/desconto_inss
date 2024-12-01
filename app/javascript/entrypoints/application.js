@@ -30,12 +30,9 @@ console.log('Visit the guide for more information: ', 'https://vite-ruby.netlify
 import { createApp } from 'vue';
 import App from '../components/App.vue';
 import store from '../store';
-
-const auth_token = localStorage.getItem('auth_token');
-if (auth_token) {
-  store.dispatch('session/loginUserWithToken', { auth_token });
-}
+import router from '../router';
 
 const app = createApp(App);
 app.use(store);
+app.use(router);
 app.mount('#app');
