@@ -5,14 +5,14 @@
     <div v-for="proponent in proponents" :id="proponent.id" :key="proponent.id">
       {{ proponent.id }}
       {{ proponent.name }}
-      <button @click="deleteRecord(proponent.id)">
-        Deletar
-      </button>
+      <button @click="deleteRecord(proponent.id)">Deletar</button>
     </div>
   </div>
 </template>
 <script>
 import { getProponents, deleteProponent } from "@/api/proponents";
+import ActionCableApp from "@/helper/actionCable.js";
+import { mapGetters } from "vuex";
 
 export default {
   name: "Home",
@@ -22,10 +22,24 @@ export default {
       proponents: [],
     };
   },
+  computed: {
+    ...mapGetters("sessionManager", ["getAuthToken"]),
+  },
   mounted() {
     this.fetchProponents();
+    this.subscribeToNotifications();
   },
   methods: {
+    subscribeToNotifications() {
+      ActionCableApp.cable.subscriptions.create(
+        { channel: "NotificationsChannel", token: this.getAuthToken },
+        {
+          received: (data) => {
+            if (data?.message === "refresh_proponents") this.fetchProponents();
+          },
+        }
+      );
+    },
     async fetchProponents() {
       try {
         const { proponents } = await getProponents();
@@ -37,7 +51,6 @@ export default {
     async deleteRecord(id) {
       try {
         await deleteProponent(id);
-        this.fetchProponents();
       } catch (error) {
         console.error("Erro ao deletar proponentes:", error);
       }

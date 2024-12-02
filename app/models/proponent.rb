@@ -24,7 +24,13 @@ class Proponent < ApplicationRecord
         accessors: %i[address_street address_number address_neighborhood address_city
                       address_state address_zipcode], coder: JSON
 
+  after_commit :notify_user
+
   private
+
+  def notify_user
+    EventDispatcherJob.perform_async(user_id, 'refresh_proponents')
+  end
 
   def normalize_cpf
     self.cpf = cpf.gsub(/[^\d]/, '') if cpf.present?
