@@ -27,11 +27,11 @@ class Api::V1::ProponentsController < ApplicationController
   end
 
   def proponents
-    @proponents ||= current_user.proponents
+    @proponents ||= user.proponents
   end
 
   def proponent
-    @proponent ||= current_user.proponents.find(params[:id])
+    @proponent ||= user.proponents.find(params[:id])
   end
 
   def render_succes

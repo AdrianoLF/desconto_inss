@@ -4,8 +4,8 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def current_user
-    @current_user ||= fetch_user_from_token
+  def user
+    @user ||= fetch_user_from_token
   end
 
   def fetch_user_from_token
