@@ -1,4 +1,4 @@
-class InssDisccountCalculatorService
+class InssDiscountCalculatorService
   SALARY_CAP = 6101.06
   BRACKETS = [
     { limit: 1045.00, aliquot: 0.075, accumulated_value: 78.37 },

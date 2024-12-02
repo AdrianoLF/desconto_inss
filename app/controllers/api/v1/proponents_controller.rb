@@ -1,12 +1,13 @@
 class Api::V1::ProponentsController < ApplicationController
-  before_action :proponents, only: [:index]
   before_action :proponent, only: %i[destroy update]
+
+  MAX_RESULTS = 5
   def index
     render json: { proponents: proponents }
   end
 
   def create
-    @proponent = proponents.new(permitted_params)
+    @proponent = user.proponents.new(permitted_params)
     @proponent.save ? render_succes : render_error
   end
 
@@ -27,7 +28,9 @@ class Api::V1::ProponentsController < ApplicationController
   end
 
   def proponents
-    @proponents ||= user.proponents
+    @proponents ||= ProponentFinder.new(user, params).perform
+                                   .page(params[:page].presence || 1)
+                                   .per(MAX_RESULTS)
   end
 
   def proponent

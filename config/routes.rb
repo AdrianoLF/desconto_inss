@@ -17,7 +17,7 @@ Rails.application.routes.draw do
 
       resources :inss_calculations, only: [] do
         collection do
-          post :disccount
+          post :discount
         end
       end
     end
