@@ -9,9 +9,7 @@ class ApplicationController < ActionController::Base
   end
 
   def fetch_user_from_token
-    jwt_payload = JWT.decode(request.headers['Authorization']&.split(' ')&.second,
-                             ENV['DEVISE_JWT_SECRET_KEY']).first
-    user_id = jwt_payload['sub']
-    User.find(user_id.to_s)
+    token = request.headers['Authorization']&.split(' ')&.second
+    FindUserByTokenService.new.perform(token)
   end
 end

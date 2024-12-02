@@ -15,15 +15,11 @@ class Users::SessionsController < Devise::SessionsController
   end
 
   def respond_to_on_destroy
-    head user_from_token.present? ? :ok : :unauthorized
+    head fetch_user_from_token.present? ? :ok : :unauthorized
   end
 
-  def user_from_token
+  def fetch_user_from_token
     token = request.headers['Authorization']&.split(' ')&.second
-    return if token.blank?
-
-    jwt_payload = JWT.decode(token, ENV['DEVISE_JWT_SECRET_KEY']).first
-    user_id = jwt_payload['sub']
-    User.find(user_id.to_s)
+    FindUserByTokenService.new.perform(token)
   end
 end
