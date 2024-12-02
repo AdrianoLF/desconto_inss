@@ -1,5 +1,6 @@
 class FindUserByTokenService
   def perform(jwt_token)
+    jwt_token = jwt_token.gsub(/^Bearer\s/, '')
     return if jwt_token.blank?
 
     jwt_payload = JWT.decode(jwt_token, ENV['DEVISE_JWT_SECRET_KEY']).first
