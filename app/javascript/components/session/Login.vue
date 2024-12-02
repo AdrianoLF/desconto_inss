@@ -1,8 +1,6 @@
 <template>
   <div class="container" @click="loggsss">
-    Hey
-
-    <h1 class="sm-title">Vue Session Manager</h1>
+    <h1 class="sm-title">Faça login ou se registre</h1>
     <div class="sm-card">
       <div v-if="isLoggedIn">
         <button @click="logoutUser" class="logout-button">Logout</button>
