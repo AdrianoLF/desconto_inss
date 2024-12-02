@@ -31,10 +31,12 @@ import { createApp } from 'vue';
 import App from '../components/App.vue';
 import store from '../store';
 import router from '../router';
+import EventBus from '@/helper/eventBus';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 const app = createApp(App);
+app.config.globalProperties.$eventBus = EventBus;
 app.use(store);
 app.use(router);
 app.mount('#app');

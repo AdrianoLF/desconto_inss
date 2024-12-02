@@ -1,24 +1,19 @@
 <template lang="">
-  <div>
-    <h1>Desconto INSS</h1>
-
-    <proponents-page />
-    <div v-for="proponent in proponents" :id="proponent.id" :key="proponent.id">
-      {{ proponent.id }}
-      {{ proponent.name }}
-      <button @click="deleteRecord(proponent.id)">Deletar</button>
-    </div>
+  <div class="p-2">
+    <h1>Cadastrar Proponente</h1>
+    <proponent-form />
+    <div style="height: 50px" />
   </div>
 </template>
 <script>
 import { getProponents, deleteProponent } from "@/api/proponents";
 import ActionCableApp from "@/helper/actionCable.js";
 import { mapGetters } from "vuex";
-import ProponentsPage from './proponents/Proponet.vue'
+import ProponentForm from "./proponents/Form.vue";
 
 export default {
   name: "Home",
-  components: {ProponentsPage},
+  components: {ProponentForm},
   data() {
     return {
       proponents: [],

@@ -16,24 +16,24 @@
   export default {
     data() {
       return {
-        isAlertVisible: false, // Controle de visibilidade do alerta
-        alertMessage: '',      // Texto da mensagem a ser exibida
+        isAlertVisible: false, // Control the visibility of the alert
+        alertMessage: '',      // The message text to display
       };
     },
     created() {
-      EventBus.on('displayAlert', this.showAlert); // Escuta o evento
+      EventBus.on('displayAlert', this.showAlert); // Listen for the event
     },
     methods: {
       showAlert(message) {
-        this.alertMessage = message;  // Define o texto do alerta
-        this.isAlertVisible = true;   // Exibe o alerta
+        this.alertMessage = message;  // Set the alert text
+        this.isAlertVisible = true;   // Show the alert
         setTimeout(() => {
-          this.isAlertVisible = false; // Esconde o alerta após 2 segundos
+          this.isAlertVisible = false; // Hide the alert after 2 seconds
         }, 2000);
       },
     },
     beforeUnmount() {
-      EventBus.off('displayAlert', this.showAlert); // Remove o ouvinte
+      EventBus.off('displayAlert', this.showAlert); // Remove the listener
     },
   };
   </script>

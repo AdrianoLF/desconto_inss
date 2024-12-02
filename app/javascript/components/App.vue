@@ -1,22 +1,58 @@
 <template>
   <div id="app">
-    <nav class="w-100 d-flex justify-content-between p-2" @click="loggsss">
-      <div class="d-flex gap-2">
-        <router-link to="/" class="btn btn-primary">Relatórios</router-link>
-        <router-link to="/proponents" class="btn btn-primary">
-          Cadastrar Proponentes
-        </router-link>
-      </div>
-      <div>
-        <router-link v-if="!isLoggedIn" to="/login" class="btn btn-secondary">
-          Login
-        </router-link>
-        <button v-if="isLoggedIn" @click="logout" class="btn btn-danger">
-          Logout
+    <AlertBox />
+
+    <nav
+      class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top shadow"
+    >
+      <div class="container-fluid">
+        <router-link to="/" class="navbar-brand">MeuApp</router-link>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Alternar navegação"
+        >
+          <span class="navbar-toggler-icon"></span>
         </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <router-link to="/" class="nav-link" active-class="active" exact
+                >Relatórios</router-link
+              >
+            </li>
+            <li class="nav-item">
+              <router-link
+                to="/proponents"
+                class="nav-link"
+                active-class="active"
+                >Cadastrar Proponentes</router-link
+              >
+            </li>
+          </ul>
+          <ul class="navbar-nav">
+            <li class="nav-item" v-if="!isLoggedIn">
+              <router-link to="/login" class="nav-link btn btn-outline-light"
+                >Login</router-link
+              >
+            </li>
+            <li class="nav-item" v-if="isLoggedIn">
+              <button @click="logout" class="nav-link btn btn-outline-light">
+                Logout
+              </button>
+            </li>
+          </ul>
+        </div>
       </div>
     </nav>
-    <router-view />
+
+    <div class="content mt-5 pt-4">
+      <router-view />
+    </div>
   </div>
 </template>
 

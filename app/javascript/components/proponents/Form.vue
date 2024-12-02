@@ -1,210 +1,237 @@
 <template>
-  <form @submit.prevent="handleSubmit">
-    <!-- Nome -->
-    <div class="form-group">
-      <label for="name">Nome*</label>
-      <input
-        type="text"
-        class="form-control"
-        id="name"
-        v-model.trim="name"
-        required
-      />
-    </div>
-
-    <!-- Data de Nascimento -->
-    <div class="form-group">
-      <label for="birth_date">Data de Nascimento*</label>
-      <input
-        type="date"
-        format="DD/MM/YYYY"
-        class="form-control"
-        id="birth_date"
-        v-model.trim="birth_date"
-        required
-      />
-    </div>
-
-    <!-- Salário -->
-    <div class="form-group">
-      <label for="salary">Salário*</label>
-      <input
-        type="number"
-        step="0.01"
-        class="form-control"
-        id="salary"
-        v-model.number="salary"
-        required
-      />
-      <button @click.prevent="calculateCurrentDiscount">
-        Previsão Desconto INSS
-      </button>
-      <span>{{ inssDiscount }}</span>
-    </div>
-
-    <!-- CPF -->
-    <div class="form-group">
-      <label for="cpf">CPF*</label>
-      <input
-        type="text"
-        class="form-control"
-        id="cpf"
-        v-model.trim="cpf"
-        placeholder="XXX-XXX-XXX-XX"
-        required
-      />
-    </div>
-
-    <!-- Endereço -->
-    <div class="form-group">
-      <label for="address_street">Rua</label>
-      <input
-        type="text"
-        class="form-control"
-        id="address_street"
-        v-model.trim="address_street"
-      />
-    </div>
-    <div class="form-group">
-      <label for="address_number">Número</label>
-      <input
-        type="number"
-        class="form-control"
-        id="address_number"
-        v-model.number="address_number"
-      />
-    </div>
-    <div class="form-group">
-      <label for="address_neighborhood">Bairro</label>
-      <input
-        type="text"
-        class="form-control"
-        id="address_neighborhood"
-        v-model.trim="address_neighborhood"
-      />
-    </div>
-    <div class="form-group">
-      <label for="address_city">Cidade</label>
-      <input
-        type="text"
-        class="form-control"
-        id="address_city"
-        v-model.trim="address_city"
-      />
-    </div>
-    <div class="form-group">
-      <label for="address_state">Estado</label>
-      <input
-        type="text"
-        class="form-control"
-        id="address_state"
-        v-model.trim="address_state"
-      />
-    </div>
-    <div class="form-group">
-      <label for="address_zipcode">CEP</label>
-      <input
-        type="text"
-        class="form-control"
-        id="address_zipcode"
-        v-model.trim="address_zipcode"
-      />
-    </div>
-
-    <!-- Telefones de Referência -->
-    <div class="form-group">
-      <label>Telefones de Referência</label>
-      <div
-        v-for="(ref, index) in phones.refence"
-        :key="'ref-' + index"
-        class="form-row align-items-center"
-      >
-        <div class="col">
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Descrição"
-            v-model.trim="ref.description"
-            required
-          />
+  <form @submit.prevent="handleSubmit" class="container mt-4">
+    <div class="card mb-3">
+      <div class="card-header">Informações Pessoais</div>
+      <div class="card-body">
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="name">Nome*</label>
+            <input
+              type="text"
+              class="form-control"
+              id="name"
+              v-model.trim="name"
+              required
+            />
+          </div>
+          <div class="form-group col-md-6">
+            <label for="cpf">CPF*</label>
+            <input
+              type="text"
+              class="form-control"
+              id="cpf"
+              v-model.trim="cpf"
+              placeholder="XXX.XXX.XXX-XX"
+              required
+            />
+          </div>
         </div>
-        <div class="col">
-          <input
-            type="tel"
-            class="form-control"
-            placeholder="Telefone"
-            v-model.trim="ref.phone"
-            required
-          />
-        </div>
-        <div class="col-auto">
-          <button
-            type="button"
-            class="btn btn-danger"
-            @click="removeReferencePhone(index)"
-          >
-            Remover
-          </button>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="birth_date">Data de Nascimento*</label>
+            <input
+              type="date"
+              class="form-control"
+              id="birth_date"
+              v-model.trim="birth_date"
+              required
+            />
+          </div>
         </div>
       </div>
-      <button
-        type="button"
-        class="btn btn-secondary mt-2"
-        @click="addReferencePhone"
-      >
-        Adicionar Telefone de Referência
-      </button>
     </div>
 
-    <!-- Telefones Pessoais -->
-    <div class="form-group">
-      <label>Telefones Pessoais</label>
-      <div
-        v-for="(personal, index) in phones.personal"
-        :key="'personal-' + index"
-        class="form-row align-items-center"
-      >
-        <div class="col">
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Descrição"
-            v-model.trim="personal.description"
-            required
-          />
-        </div>
-        <div class="col">
-          <input
-            type="tel"
-            class="form-control"
-            placeholder="Telefone"
-            v-model.trim="personal.phone"
-            required
-          />
-        </div>
-        <div class="col-auto">
-          <button
-            type="button"
-            class="btn btn-danger"
-            @click="removePersonalPhone(index)"
-          >
-            Remover
-          </button>
+    <div class="card mb-3">
+      <div class="card-header">Informações Salariais</div>
+      <div class="card-body">
+        <div class="form-row align-items-end">
+          <div class="form-group col-md-6">
+            <label for="salary">Salário*</label>
+            <input
+              type="number"
+              step="0.01"
+              class="form-control"
+              id="salary"
+              v-model.number="salary"
+              required
+            />
+          </div>
+          <div class="form-group col-md-6">
+            <button
+              class="btn btn-info mb-2 p"
+              @click.prevent="calculateCurrentDiscount"
+            >
+              Previsão Desconto INSS
+            </button>
+            <span class="ml-2 px-2">{{ inssDiscount }}</span>
+          </div>
         </div>
       </div>
-      <button
-        type="button"
-        class="btn btn-secondary mt-2"
-        @click="addPersonalPhone"
-      >
-        Adicionar Telefone Pessoal
-      </button>
     </div>
 
-    <!-- Botão de Envio -->
-    <button type="submit" class="btn btn-primary" :disabled="isLoading">
-      Enviar
-    </button>
+    <div class="card mb-3">
+      <div class="card-header">Endereço</div>
+      <div class="card-body">
+        <div class="form-row">
+          <div class="form-group col-md-8">
+            <label for="address_street">Rua</label>
+            <input
+              type="text"
+              class="form-control"
+              id="address_street"
+              v-model.trim="address_street"
+            />
+          </div>
+          <div class="form-group col-md-4">
+            <label for="address_number">Número</label>
+            <input
+              type="number"
+              class="form-control"
+              id="address_number"
+              v-model.number="address_number"
+            />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="address_neighborhood">Bairro</label>
+            <input
+              type="text"
+              class="form-control"
+              id="address_neighborhood"
+              v-model.trim="address_neighborhood"
+            />
+          </div>
+          <div class="form-group col-md-6">
+            <label for="address_city">Cidade</label>
+            <input
+              type="text"
+              class="form-control"
+              id="address_city"
+              v-model.trim="address_city"
+            />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="address_state">Estado</label>
+            <input
+              type="text"
+              class="form-control"
+              id="address_state"
+              v-model.trim="address_state"
+            />
+          </div>
+          <div class="form-group col-md-6">
+            <label for="address_zipcode">CEP</label>
+            <input
+              type="text"
+              class="form-control"
+              id="address_zipcode"
+              v-model.trim="address_zipcode"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mb-3">
+      <div class="card-header">Telefones de Referência</div>
+      <div class="card-body">
+        <div
+          v-for="(ref, index) in phones.refence"
+          :key="'ref-' + index"
+          class="form-row align-items-center mb-2"
+        >
+          <div class="col-md-5">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Descrição"
+              v-model.trim="ref.description"
+              required
+            />
+          </div>
+          <div class="col-md-5">
+            <input
+              type="tel"
+              class="form-control"
+              placeholder="Telefone"
+              v-model.trim="ref.phone"
+              required
+            />
+          </div>
+          <div class="col-md-2 text-right">
+            <button
+              type="button"
+              class="btn btn-danger"
+              @click="removeReferencePhone(index)"
+            >
+              Remover
+            </button>
+          </div>
+        </div>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          @click="addReferencePhone"
+        >
+          Adicionar Telefone de Referência
+        </button>
+      </div>
+    </div>
+
+    <div class="card mb-3">
+      <div class="card-header">Telefones Pessoais</div>
+      <div class="card-body">
+        <div
+          v-for="(personal, index) in phones.personal"
+          :key="'personal-' + index"
+          class="form-row align-items-center mb-2"
+        >
+          <div class="col-md-5">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Descrição"
+              v-model.trim="personal.description"
+              required
+            />
+          </div>
+          <div class="col-md-5">
+            <input
+              type="tel"
+              class="form-control"
+              placeholder="Telefone"
+              v-model.trim="personal.phone"
+              required
+            />
+          </div>
+          <div class="col-md-2 text-right">
+            <button
+              type="button"
+              class="btn btn-danger"
+              @click="removePersonalPhone(index)"
+            >
+              Remover
+            </button>
+          </div>
+        </div>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          @click="addPersonalPhone"
+        >
+          Adicionar Telefone Pessoal
+        </button>
+      </div>
+    </div>
+
+    <div class="text-center">
+      <button type="submit" class="btn btn-primary" :disabled="isLoading">
+        Enviar
+      </button>
+    </div>
   </form>
 </template>
 
@@ -257,7 +284,9 @@ export default {
         this.isLoading = false;
       } catch (error) {
         this.isLoading = false;
-        console.error("Erro ao criar proponentes:", error);
+        let message =
+          error?.response?.data?.errors[0] || "Erro ao criar proponente";
+        this.$eventBus.emit("displayAlert", message);
       }
     },
     addReferencePhone() {
@@ -302,6 +331,4 @@ export default {
 };
 </script>
 
-<style scoped>
-/* Estilos customizados (opcional) */
-</style>
+<style scoped></style>
