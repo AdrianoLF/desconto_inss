@@ -4,8 +4,14 @@ Rails.application.routes.draw do
                sessions: 'users/sessions',
                registrations: 'users/registrations'
              }
-  get '/member-data', to: 'members#show'
   root 'pages#home' # Define a rota raiz para pages#home
+
+  namespace :api, defaults: { format: 'json' } do
+    namespace :v1 do
+      resource :members, only: [:show]
+      resources :proponents, only: %i[index update create destroy]
+    end
+  end
 
   get '*path', to: 'pages#home', constraints: ->(req) { !req.xhr? && req.format.html? }
 end
