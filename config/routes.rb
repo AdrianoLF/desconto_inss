@@ -10,6 +10,12 @@ Rails.application.routes.draw do
     namespace :v1 do
       resource :members, only: [:show]
       resources :proponents, only: %i[index update create destroy]
+
+      resources :inss_calculations, only: [] do
+        collection do
+          post :disccount
+        end
+      end
     end
   end
 
