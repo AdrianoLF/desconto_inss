@@ -1,11 +1,15 @@
+require 'sidekiq/web'
 Rails.application.routes.draw do
   devise_for :users,
              controllers: {
                sessions: 'users/sessions',
                registrations: 'users/registrations'
              }
-  root 'pages#home' # Define a rota raiz para pages#home
+  authenticate :user do
+    mount Sidekiq::Web => '/sidekiq'
+  end
 
+  root 'pages#home'
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do
       resource :members, only: [:show]

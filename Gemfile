@@ -28,7 +28,7 @@ gem 'stimulus-rails'
 gem 'jbuilder'
 
 # Use Redis adapter to run Action Cable in production
-# gem "redis", "~> 4.0"
+gem 'redis', '~> 4.0'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', require: false
@@ -42,6 +42,8 @@ gem 'devise-jwt', '~> 0.12.1'
 gem 'rack-cors', '~> 2.0'
 
 gem 'cpf_cnpj'
+
+gem 'sidekiq', '~> 7.3'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
