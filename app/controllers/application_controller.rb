@@ -9,7 +9,6 @@ class ApplicationController < ActionController::Base
   end
 
   def fetch_user_from_token
-    token = request.headers['Authorization']&.split(' ')&.second
-    FindUserByTokenService.new.perform(token)
+    UserFinder.new(request.headers['Authorization']).perform
   end
 end

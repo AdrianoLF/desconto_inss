@@ -13,6 +13,6 @@ class NotificationsChannel < ApplicationCable::Channel
   private
 
   def fetch_user_from_token
-    FindUserByTokenService.new.perform(params[:token])
+    UserFinder.new(params[:token]).perform
   end
 end
