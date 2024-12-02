@@ -1,5 +1,5 @@
 <template>
-  <div class="container" @click="loggsss">
+  <div class="container">
     <h1 class="sm-title">Faça login ou se registre</h1>
     <div class="sm-card">
       <div v-if="isLoggedIn">
@@ -89,7 +89,6 @@ export default {
   },
   watch: {
     isLoggedIn(newVal){
-      console.log(this.isLoggedIn);
       if (newVal) this.$router.push({ name: 'Home' });
     }
   },
@@ -126,12 +125,6 @@ export default {
       this.signUpPassword = "";
       this.loginEmail = "";
       this.loginPassword = "";
-    },
-    loggsss() {
-      console.log("asjkdjklasdjlhk");
-      console.log(this.isLoggedIn);
-      console.log(localStorage.auth_token);
-      console.log(localStorage.getItem("auth_token"));
     },
   },
 };

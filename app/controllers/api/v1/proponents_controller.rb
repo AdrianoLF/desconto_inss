@@ -2,13 +2,19 @@ class Api::V1::ProponentsController < ApplicationController
   before_action :proponent, only: %i[destroy update]
 
   MAX_RESULTS = 5
+
   def index
-    render json: { proponents: proponents }
+    render json: {
+      proponents: proponents,
+      total_pages: proponents.total_pages,
+      current_page: proponents.current_page,
+      count_total: proponents.total_count
+    }
   end
 
   def create
     @proponent = user.proponents.new(permitted_params)
-    @proponent.save ? render_succes : render_error
+    @proponent.save ? render_success : render_error
   end
 
   def destroy
@@ -17,7 +23,7 @@ class Api::V1::ProponentsController < ApplicationController
 
   def update
     @proponent.update(permitted_params)
-    @proponent.save ? render_succes : render_error
+    @proponent.save ? render_success : render_error
   end
 
   private
@@ -37,7 +43,7 @@ class Api::V1::ProponentsController < ApplicationController
     @proponent ||= user.proponents.find(params[:id])
   end
 
-  def render_succes
+  def render_success
     render json: { proponent: @proponent }
   end
 

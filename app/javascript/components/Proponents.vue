@@ -2,6 +2,7 @@
   <div>
     <h1>Desconto INSS</h1>
 
+    <proponents-page />
     <div v-for="proponent in proponents" :id="proponent.id" :key="proponent.id">
       {{ proponent.id }}
       {{ proponent.name }}
@@ -13,10 +14,11 @@
 import { getProponents, deleteProponent } from "@/api/proponents";
 import ActionCableApp from "@/helper/actionCable.js";
 import { mapGetters } from "vuex";
+import ProponentsPage from './proponents/Proponet.vue'
 
 export default {
   name: "Home",
-  components: {},
+  components: {ProponentsPage},
   data() {
     return {
       proponents: [],

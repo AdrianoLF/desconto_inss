@@ -1,5 +1,12 @@
-import apiClient from './index';
+import apiClient from "./index";
 
-// Endpoints relacionados a "Usuários"
-export const getProponents = () => apiClient.get('/proponents');
+const jsonToParams = (json) => {
+    return new URLSearchParams(json).toString();
+  };
+export const getProponents = (params) => {
+    const queryParams = jsonToParams(params) || '';
+    return apiClient.get('/proponents?' + queryParams);
+  };
+  
 export const deleteProponent = (id) => apiClient.delete(`/proponents/${id}`);
+export const createProponent = (body) => apiClient.post(`/proponents`, body);
