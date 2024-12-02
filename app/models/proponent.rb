@@ -2,16 +2,17 @@
 #
 # Table name: proponents
 #
-#  id         :bigint           not null, primary key
-#  user_id    :bigint           not null
-#  name       :string           not null
-#  cpf        :string           not null
-#  birth_date :date             not null
-#  address    :jsonb
-#  phones     :jsonb
-#  salary     :decimal(15, 2)   not null
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id            :bigint           not null, primary key
+#  user_id       :bigint           not null
+#  name          :string           not null
+#  cpf           :string           not null
+#  birth_date    :date             not null
+#  address       :jsonb
+#  phones        :jsonb
+#  salary        :decimal(15, 2)   not null
+#  inss_discount :decimal(15, 2)   not null
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
 #
 class Proponent < ApplicationRecord
   belongs_to :user
@@ -26,6 +27,8 @@ class Proponent < ApplicationRecord
 
   after_commit :notify_user
 
+  before_save :calculate_inss_discount
+
   private
 
   def notify_user
@@ -34,5 +37,10 @@ class Proponent < ApplicationRecord
 
   def normalize_cpf
     self.cpf = cpf.gsub(/[^\d]/, '') if cpf.present?
+  end
+
+  def calculate_inss_discount
+    p 'EUUU AQUII'
+    self.inss_discount = InssDiscountCalculatorService.new.perform(salary)
   end
 end

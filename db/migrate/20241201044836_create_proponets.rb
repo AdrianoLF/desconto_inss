@@ -8,6 +8,7 @@ class CreateProponets < ActiveRecord::Migration[7.0]
       t.jsonb :address
       t.jsonb :phones
       t.decimal :salary, precision: 15, scale: 2, null: false
+      t.decimal :inss_discount, precision: 15, scale: 2, null: false
 
       t.timestamps
     end

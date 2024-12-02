@@ -30,6 +30,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_12_01_044836) do
     t.jsonb "address"
     t.jsonb "phones"
     t.decimal "salary", precision: 15, scale: 2, null: false
+    t.decimal "inss_discount", precision: 15, scale: 2, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["cpf"], name: "index_proponents_on_cpf"
