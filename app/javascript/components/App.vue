@@ -2,7 +2,7 @@
   <div id="app">
     <AlertBox />
 
-    <nav
+    <nav v-if="isLoggedIn"
       class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top shadow"
     >
       <div class="container-fluid">

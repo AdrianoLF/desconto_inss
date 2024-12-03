@@ -1,66 +1,95 @@
 <template>
-  <div class="container">
-    <h1 class="sm-title">Faça login ou se registre</h1>
-    <div class="sm-card">
+  <div class="container mt-5">
+    <h1 class="text-center mb-4">Faça login ou se registre</h1>
+    <div class="card p-4 shadow">
       <div v-if="isLoggedIn">
-        <button @click="logoutUser" class="logout-button">Logout</button>
-        <table class="table">
+        <div class="d-flex justify-content-end mb-3">
+          <button @click="logoutUser" class="btn btn-danger">Logout</button>
+        </div>
+        <table class="table table-striped">
           <thead class="thead-dark">
-            <tr class="table-headers">
+            <tr>
               <th scope="col">ID</th>
-              <th scope="col">email</th>
+              <th scope="col">Email</th>
               <th scope="col">Token</th>
             </tr>
           </thead>
           <tbody>
-            <tr class="table-rows">
-              <th class="table-row">[{{ this.getUserID }}]</th>
-              <td class="table-row table-row-username">
-                {{ this.getUserEmail }}
-              </td>
-              <td class="table-row">{{ this.getAuthToken }}</td>
+            <tr>
+              <th scope="row">{{ getUserID }}</th>
+              <td>{{ getUserEmail }}</td>
+              <td>{{ getAuthToken }}</td>
             </tr>
           </tbody>
         </table>
       </div>
       <div v-else>
-        <h3>Login!</h3>
-        <form @submit="onLogin" class="login-form">
-          <input
-            class="login-form-email"
-            type="text"
-            v-model="loginEmail"
-            placeholder="Email"
-          />
-          <br />
-          <input
-            class="login-form-password"
-            type="password"
-            v-model="loginPassword"
-            placeholder="Password"
-          />
-          <br />
-          <input type="submit" value="Login" class="login-form-submit" />
-        </form>
-        <br />
-        <h3>Sign Up!</h3>
-        <form @submit="onSignUp" class="sign-up-form">
-          <input
-            class="sign-up-form-email"
-            type="email"
-            v-model="signUpEmail"
-            placeholder="Email"
-          />
-          <br />
-          <input
-            type="password"
-            class="sign-up-form-password"
-            v-model="signUpPassword"
-            placeholder="Password"
-          />
-          <br />
-          <input type="submit" value="Sign up" class="sign-up-form-submit" />
-        </form>
+        <div class="row">
+          <!-- Formulário de Login -->
+          <div class="col-md-6 mb-4">
+            <h3 class="mb-3">Login</h3>
+            <form @submit.prevent="onLogin">
+              <div class="form-group">
+                <label for="loginEmail">Email</label>
+                <input
+                  type="email"
+                  id="loginEmail"
+                  v-model="loginEmail"
+                  class="form-control"
+                  placeholder="Digite seu email"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="loginPassword">Senha</label>
+                <input
+                  type="password"
+                  id="loginPassword"
+                  v-model="loginPassword"
+                  class="form-control"
+                  placeholder="Digite sua senha"
+                  required
+                />
+              </div>
+              <button type="submit.prevent" class="btn btn-primary">Login</button>
+              <span v-if="loginError" class="text-danger ml-2">{{
+                loginError
+              }}</span>
+            </form>
+          </div>
+          <!-- Formulário de Cadastro -->
+          <div class="col-md-6 mb-4">
+            <h3 class="mb-3">Registrar-se</h3>
+            <form @submit.prevent="onSignUp">
+              <div class="form-group">
+                <label for="signUpEmail">Email</label>
+                <input
+                  type="email"
+                  id="signUpEmail"
+                  v-model="signUpEmail"
+                  class="form-control"
+                  placeholder="Digite seu email"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="signUpPassword">Senha</label>
+                <input
+                  type="password"
+                  id="signUpPassword"
+                  v-model="signUpPassword"
+                  class="form-control"
+                  placeholder="Digite sua senha"
+                  required
+                />
+              </div>
+              <button type="submit.prevent" class="btn btn-success">Registrar</button>
+              <span v-if="signUpError" class="text-danger ml-2">{{
+                signUpError
+              }}</span>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -69,6 +98,7 @@
 <script>
 import "@/store/index.js";
 import { mapActions, mapGetters } from "vuex";
+
 export default {
   name: "SessionManager",
   computed: {
@@ -85,12 +115,14 @@ export default {
       signUpPassword: "",
       loginEmail: "",
       loginPassword: "",
+      loginError: "",
+      signUpError: "",
     };
   },
   watch: {
-    isLoggedIn(newVal){
-      if (newVal) this.$router.push({ name: 'Home' });
-    }
+    isLoggedIn(newVal) {
+      if (newVal) this.$router.push({ name: "Home" });
+    },
   },
   methods: {
     ...mapActions("sessionManager", [
@@ -106,8 +138,12 @@ export default {
           password: this.signUpPassword,
         },
       };
-      await this.registerUser(data);
-      this.resetData();
+      try {
+        await this.registerUser(data);
+        this.resetData();
+      } catch (error) {
+        this.signUpError = "Erro ao registrar o usuário.";
+      }
     },
     async onLogin(event) {
       event.preventDefault();
@@ -117,128 +153,25 @@ export default {
           password: this.loginPassword,
         },
       };
-      await this.loginUser(data);
-      this.resetData();
+      try {
+        await this.loginUser(data);
+        this.resetData();
+      } catch (error) {
+        this.loginError = "Erro ao fazer login.";
+      }
     },
     resetData() {
       this.signUpEmail = "";
       this.signUpPassword = "";
       this.loginEmail = "";
       this.loginPassword = "";
+      this.loginError = "";
+      this.signUpError = "";
     },
   },
 };
 </script>
 
 <style scoped>
-.sm-title {
-  font-size: 2.5rem;
-  font-weight: bold;
-  text-align: center;
-  font-family: "Roboto", sans-serif;
-}
-.container {
-  width: 90%;
-  margin: 0 auto;
-}
-.sm-card {
-  width: 75%;
-  padding: 20px;
-  margin: 0 auto;
-  height: 25em;
-  border-radius: 10px;
-  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
-}
-.sign-up-form {
-  width: 100%;
-}
-.sign-up-form-email {
-  width: 55%;
-  padding: 10px;
-  margin: 0 auto;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-}
-.sign-up-form-password {
-  width: 55%;
-  padding: 10px;
-  margin: 0 auto;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-}
-.sign-up-form-submit {
-  width: 15%;
-  padding: 1em;
-  margin: 0 auto;
-  border-radius: 5px;
-  background-color: #1a77ce;
-  color: #fff;
-  border: none;
-}
-.sign-up-form-submit:hover {
-  background-color: #0d5c8a;
-  cursor: pointer;
-}
-
-.login-form {
-  width: 100%;
-}
-.login-form-email {
-  width: 55%;
-  padding: 10px;
-  margin: 0 auto;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-}
-.login-form-password {
-  width: 55%;
-  padding: 10px;
-  margin: 0 auto;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-}
-.login-form-submit {
-  width: 15%;
-  padding: 1em;
-  margin: 0 auto;
-  border-radius: 5px;
-  background-color: #1a77ce;
-  color: #fff;
-  border: none;
-}
-.login-form-submit:hover {
-  background-color: #0d5c8a;
-  cursor: pointer;
-}
-.logout-button {
-  width: 15%;
-  padding: 1em;
-  margin: 0 auto;
-  border-radius: 5px;
-  background-color: #1a77ce;
-  color: #fff;
-  border: none;
-}
-.logout-button:hover {
-  background-color: #0d5c8a;
-  cursor: pointer;
-}
-.table-headers {
-  background-color: #2b3b49;
-  color: #fff;
-  max-width: 90%;
-  margin: 0 auto;
-}
-.table-rows {
-  background-color: #f2f2f2;
-  margin: 0 auto;
-}
-.table-row {
-  word-break: break-all;
-  text-align: center;
-  padding: 10px;
-}
-.table-row-username {
-  width: 30%;
-}
+/* Estilos adicionais podem ser adicionados aqui se necessário */
 </style>
