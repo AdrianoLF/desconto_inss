@@ -79,12 +79,6 @@ export default {
       this.logoutUser();
       this.$router.push({ name: "Login" });
     },
-    loggsss() {
-      console.log("asjkdjklasdjlhk");
-      console.log(this.isLoggedIn);
-      console.log(localStorage.auth_token);
-      console.log(localStorage.getItem("auth_token"));
-    },
   },
 };
 </script>
