@@ -14,3 +14,12 @@ Style/ClassAndModuleChildren:
 
 Style/FrozenStringLiteralComment:
   Enabled: false
+
+RSpec/ExampleLength:
+  Max: 25
+
+RSpec/MultipleExpectations:
+  Max: 5
+
+RSpec/MultipleMemoizedHelpers:
+  Max: 20
