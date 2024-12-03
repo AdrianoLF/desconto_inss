@@ -140,6 +140,17 @@ export default {
       isLoading: true,
     };
   },
+  watch: {
+    searchName() {
+      this.currentPage = 1;
+    },
+    searchCpf() {
+      this.currentPage = 1;
+    },
+    selectedDiscountGroup() {
+      this.currentPage = 1;
+    },
+  },
   computed: {
     ...mapGetters("sessionManager", ["getAuthToken"]),
   },
