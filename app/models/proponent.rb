@@ -21,7 +21,7 @@ class Proponent < ApplicationRecord
   validates :cpf, uniqueness: { scope: :user_id, message: 'Proponente já está presente' }
   validate -> { errors.add(:cpf, 'inválido') unless CPF.valid?(cpf) }
 
-  store :content_attributes,
+  store :address,
         accessors: %i[address_street address_number address_neighborhood address_city
                       address_state address_zipcode], coder: JSON
 
@@ -40,7 +40,6 @@ class Proponent < ApplicationRecord
   end
 
   def calculate_inss_discount
-    p 'EUUU AQUII'
     self.inss_discount = InssDiscountCalculatorService.new.perform(salary)
   end
 end

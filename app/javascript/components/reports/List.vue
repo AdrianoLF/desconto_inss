@@ -50,15 +50,28 @@
           <th scope="col">Nome</th>
           <th scope="col">CPF</th>
           <th scope="col">Salário</th>
-          <th scope="col">Ações</th>
+          <th scope="col"></th>
+          <th scope="col"></th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="proponent in proponents" :key="proponent.id">
+        <tr v-if="isLoading">
+          Carregando...
+        </tr>
+        <tr v-else v-for="proponent in proponents" :key="proponent.id">
           <th scope="row">{{ proponent.id }}</th>
           <td>{{ proponent.name }}</td>
           <td>{{ proponent.cpf }}</td>
           <td>{{ formatSalary(proponent.salary) }}</td>
+          <td>
+            <router-link
+              :to="`/proponents/edit/${proponent.id}`"
+              class="btn btn-primary btn-sm"
+              target="_blank"
+            >
+              Editar
+            </router-link>
+          </td>
           <td>
             <button
               class="btn btn-danger btn-sm"
@@ -121,10 +134,10 @@ export default {
       proponents: [],
       searchName: "",
       searchCpf: "",
-      selectedDiscountGroup: "", // Nova propriedade para o filtro discount_group
+      selectedDiscountGroup: "",
       currentPage: 1,
       totalPages: 1,
-      perPage: 10, // Número de itens por página
+      isLoading: true,
     };
   },
   computed: {
@@ -132,36 +145,26 @@ export default {
   },
   mounted() {
     this.fetchProponents();
-    this.subscribeToNotifications();
-    // Cria uma versão debounced do fetchProponents para otimizar as buscas
     this.debouncedFetchProponents = debounce(this.fetchProponents, 300);
   },
   methods: {
-    subscribeToNotifications() {
-      ActionCableApp.cable.subscriptions.create(
-        { channel: "NotificationsChannel", token: this.getAuthToken },
-        {
-          received: (data) => {
-            if (data?.message === "refresh_proponents") this.fetchProponents();
-          },
-        }
-      );
-    },
     async fetchProponents() {
       try {
         const params = {
           page: this.currentPage,
-          per_page: this.perPage,
           name: this.searchName,
           cpf: this.searchCpf,
-          discount_group: this.selectedDiscountGroup, // Inclui o filtro discount_group
+          discount_group: this.selectedDiscountGroup,
         };
         const response = await getProponents(params);
-        // Supondo que a resposta contenha 'proponents' e 'total_pages'
         this.proponents = response.proponents;
         this.totalPages = response.total_pages || 1;
+        this.isLoading = false;
       } catch (error) {
-        console.error("Erro ao buscar proponentes:", error);
+        this.isLoading = false;
+        let message =
+          error?.response?.data?.errors?.[0] || "Erro ao buscar proponentes";
+        this.$eventBus.emit("displayAlert", message);
       }
     },
     async deleteRecord(id) {
@@ -170,7 +173,9 @@ export default {
           await deleteProponent(id);
           this.fetchProponents(); // Atualiza a lista após deletar
         } catch (error) {
-          console.error("Erro ao deletar proponente:", error);
+          let message =
+            error?.response?.data?.errors?.[0] || "Erro ao deletar proponente";
+          this.$eventBus.emit("displayAlert", message);
         }
       }
     },

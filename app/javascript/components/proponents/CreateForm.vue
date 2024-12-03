@@ -282,10 +282,11 @@ export default {
         await createProponent(body);
         this.resetForm();
         this.isLoading = false;
+        this.$eventBus.emit("displayAlert", "Proponente criado com sucesso!");
       } catch (error) {
         this.isLoading = false;
         let message =
-          error?.response?.data?.errors[0] || "Erro ao criar proponente";
+          error?.response?.data?.errors?.[0] || "Erro ao criar proponente";
         this.$eventBus.emit("displayAlert", message);
       }
     },

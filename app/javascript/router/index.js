@@ -2,12 +2,19 @@ import { createRouter, createWebHistory } from "vue-router";
 import Home from "../components/reports/Reports.vue";
 import Proponents from "../components/Proponents.vue";
 import Login from "../components/session/Login.vue";
-import store from "@/store"; 
+import ProponentEditForm from "../components/proponents/EditForm.vue";
+import store from "@/store";
 
 const routes = [
   { path: "/", name: "Home", component: Home },
   { path: "/proponents", name: "Proponents", component: Proponents },
   { path: "/login", name: "Login", component: Login },
+  {
+    path: "/proponents/edit/:id",
+    name: "ProponentEdit",
+    component: ProponentEditForm,
+    props: true,
+  },
 ];
 
 const router = createRouter({
@@ -19,7 +26,7 @@ router.beforeEach((to, from, next) => {
   if (!store.getters["sessionManager/isLoggedIn"] && to.name !== "Login") {
     next({ name: "Login" });
   } else {
-    next(); 
+    next();
   }
 });
 

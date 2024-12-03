@@ -1,5 +1,5 @@
 class Api::V1::ProponentsController < ApplicationController
-  before_action :proponent, only: %i[destroy update]
+  before_action :proponent, only: %i[destroy update show]
 
   MAX_RESULTS = 5
 
@@ -9,6 +9,12 @@ class Api::V1::ProponentsController < ApplicationController
       total_pages: proponents.total_pages,
       current_page: proponents.current_page,
       count_total: proponents.total_count
+    }
+  end
+
+  def show
+    render json: {
+      proponent: @proponent
     }
   end
 
@@ -24,6 +30,12 @@ class Api::V1::ProponentsController < ApplicationController
   def update
     @proponent.update(permitted_params)
     @proponent.save ? render_success : render_error
+  end
+
+  def report
+    metrics = ReportBuilder.new(user).report_by_discount_group
+    total_count = metrics&.values&.sum || 0
+    render json: { total_count: total_count, group_count: metrics }
   end
 
   private

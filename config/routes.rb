@@ -13,7 +13,11 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do
       resource :members, only: [:show]
-      resources :proponents, only: %i[index update create destroy]
+      resources :proponents, only: %i[index update create destroy show] do
+        collection do
+          get :report
+        end
+      end
 
       resources :inss_calculations, only: [] do
         collection do
