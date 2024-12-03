@@ -9,4 +9,8 @@ export default defineConfig({
     FullReload(["config/routes.rb", "app/views/**/*"], {delay: 200}),
     Vue()
   ],
+  server: {
+    host: '0.0.0.0',
+    port: 5173
+  }
 })
