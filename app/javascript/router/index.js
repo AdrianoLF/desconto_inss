@@ -1,14 +1,14 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../components/reports/Reports.vue";
-import Proponents from "../components/Proponents.vue";
+import ProponentCreateForm from "../components/proponents/CreateForm.vue";
 import Login from "../components/session/Login.vue";
 import ProponentEditForm from "../components/proponents/EditForm.vue";
 import store from "@/store";
 
 const routes = [
   { path: "/", name: "Home", component: Home },
-  { path: "/proponents", name: "Proponents", component: Proponents },
   { path: "/login", name: "Login", component: Login },
+  { path: "/proponents/new", name: "ProponentCreate", component: ProponentCreateForm },
   {
     path: "/proponents/edit/:id",
     name: "ProponentEdit",

@@ -21,17 +21,22 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <router-link to="/" class="nav-link" active-class="active" exact
-                >Relatórios</router-link
-              >
+              <router-link to="/" class="nav-link" active-class="active" exact>
+                Relatórios
+              </router-link>
             </li>
             <li class="nav-item">
               <router-link
-                to="/proponents"
+                to="/proponents/new"
                 class="nav-link"
                 active-class="active"
                 >Cadastrar Proponentes</router-link
               >
+            </li>
+            <li class="nav-item">
+              <a href="/sidekiq" class="nav-link" target="blank">
+                Sidekiq
+              </a>
             </li>
           </ul>
           <ul class="navbar-nav">

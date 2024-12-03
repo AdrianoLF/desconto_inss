@@ -109,6 +109,7 @@ export default {
   },
   methods: {
     async fetchReport() {
+      this.isLoadingReport = true;
       try {
         const { total_count, group_count } = await getProponentsReport();
         const { first, second, third, fourth } = group_count;
@@ -128,14 +129,7 @@ export default {
         { channel: "NotificationsChannel", token: this.getAuthToken },
         {
           received: (data) => {
-            const now = Date.now();
-            if (now - this.lastMessageReceivedTime >= 1000) {
-              this.lastMessageReceivedTime = now;
-              if (data?.message === "refresh_proponents") {
-                this.isLoadingReport = true;
-                this.fetchReport();
-              }
-            }
+            if (data?.message === "refresh_proponents") this.fetchReport();
           },
         }
       );
