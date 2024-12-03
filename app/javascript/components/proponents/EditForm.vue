@@ -146,7 +146,7 @@
       <div class="card-header">Telefones de Referência</div>
       <div class="card-body">
         <div
-          v-for="(ref, index) in phones.refence"
+          v-for="(ref, index) in phones.reference"
           :key="'ref-' + index"
           class="form-row align-items-center mb-2"
         >
@@ -265,7 +265,7 @@ export default {
       address_street: "",
       address_zipcode: "",
       phones: {
-        refence: [],
+        reference: [],
         personal: [],
       },
     };
@@ -286,7 +286,7 @@ export default {
         this.address_city = data?.address?.address_city || "";
         this.address_state = data?.address?.address_state || "";
         this.address_zipcode = data?.address?.address_zipcode || "";
-        this.phones = data.phones || { refence: [], personal: [] };
+        this.phones = data.phones || { reference: [], personal: [] };
       } catch (error) {
         let message =
           error?.response?.data?.errors?.[0] || "Erro ao buscar proponente";
@@ -326,10 +326,10 @@ export default {
       }
     },
     addReferencePhone() {
-      this.phones.refence.push({ description: "", phone: "" });
+      this.phones.reference.push({ description: "", phone: "" });
     },
     removeReferencePhone(index) {
-      this.phones.refence.splice(index, 1);
+      this.phones.reference.splice(index, 1);
     },
     addPersonalPhone() {
       this.phones.personal.push({ description: "", phone: "" });
